@@ -47,6 +47,7 @@ SYSTEM_PROMPT = """你是一位資深的生物醫學 AI 科學家，同時具備
 請嚴格以 JSON 格式輸出，不得包含任何 JSON 以外的文字（不要加 ```json 等標記）：
 {
   "llm_summary": "（繁體中文）2~4 句話的精簡摘要，包含核心方法與主要貢獻",
+  "translated_summary": "（繁體中文）請將原始摘要(Abstract)完整翻譯為繁體中文",
   "code_available": "YES | NO | PARTIAL | UNKNOWN",
   "code_url": "程式碼連結（若無則為空字串）",
   "data_available": "YES | NO | PARTIAL | UNKNOWN",
@@ -98,7 +99,7 @@ def _parse_json_response(text: str) -> dict | None:
 
 def _normalize_result(result: dict) -> dict:
     """Ensure all required keys exist and normalize availability flags."""
-    required = ["llm_summary", "code_available", "code_url",
+    required = ["llm_summary", "translated_summary", "code_available", "code_url",
                 "data_available", "data_url", "theory_assumptions",
                 "exp_motivation", "sota_comparison"]
     for key in required:
@@ -219,7 +220,8 @@ def _analyze_ollama(paper: dict, model_tag: str, retries: int = 3, delay: float 
 def _failed_result(error_msg: str, backend: str) -> dict:
     return {
         "status": "failed",
-        "llm_summary": "",
+        "llm_summary": "分析失敗，無法生成摘要",
+        "translated_summary": "翻譯失敗",
         "code_available": "UNKNOWN",
         "code_url": "",
         "data_available": "UNKNOWN",

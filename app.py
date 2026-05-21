@@ -622,6 +622,10 @@ else:
             # Original abstract
             st.markdown("**📄 原始摘要**")
             st.markdown(f"""<div class="analysis-block">{paper['summary'][:800]}{'...' if len(paper['summary']) > 800 else ''}</div>""", unsafe_allow_html=True)
+            
+            if paper.get("translated_summary"):
+                st.markdown("**🇹🇼 摘要繁中翻譯**")
+                st.markdown(f"""<div class="analysis-block">{paper['translated_summary']}</div>""", unsafe_allow_html=True)
 
             # AI Analysis (only if analyzed)
             if paper["status"] == "analyzed":

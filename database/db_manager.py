@@ -37,6 +37,7 @@ class Literature(Base):
     theory_assumptions = Column(Text)
     exp_motivation = Column(Text)
     sota_comparison = Column(Text)
+    translated_summary = Column(Text)  # Full abstract translation
     raw_analysis = Column(Text)  # Full raw LLM output
 
 # Create engine and session maker
@@ -104,6 +105,7 @@ def update_analysis(paper_id, analysis_dict):
             paper.theory_assumptions = analysis_dict.get("theory_assumptions", "")
             paper.exp_motivation = analysis_dict.get("exp_motivation", "")
             paper.sota_comparison = analysis_dict.get("sota_comparison", "")
+            paper.translated_summary = analysis_dict.get("translated_summary", "")
             paper.raw_analysis = analysis_dict.get("raw_analysis", "")
             
         session.commit()
