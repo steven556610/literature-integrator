@@ -185,10 +185,10 @@ def send_email_report(papers: list, notion_url: str = "", subject: str = None) -
             server.starttls()
             server.login(SENDER_EMAIL, SENDER_PASSWORD)
             server.sendmail(SENDER_EMAIL, RECEIVER_EMAIL, msg.as_string())
-        print(f"  ✅ Email sent successfully.")
+        print("  [OK] Email sent successfully.")
         return True
     except Exception as e:
-        print(f"  ❌ Email sending failed: {e}")
+        print(f"  [FAIL] Email sending failed: {e}")
         return False
 
 
@@ -263,13 +263,13 @@ def send_line_report(papers: list, notion_url: str = "") -> bool:
         print(f"[*] Sending LINE push message to user {LINE_USER_ID[:8]}...")
         resp = requests.post(LINE_API_URL, headers=headers, json=payload, timeout=15)
         if resp.status_code == 200:
-            print("  ✅ LINE message sent successfully.")
+            print("  [OK] LINE message sent successfully.")
             return True
         else:
-            print(f"  ❌ LINE API returned status {resp.status_code}: {resp.text}")
+            print(f"  [FAIL] LINE API returned status {resp.status_code}: {resp.text}")
             return False
     except Exception as e:
-        print(f"  ❌ LINE message sending failed: {e}")
+        print(f"  [FAIL] LINE message sending failed: {e}")
         return False
 
 
