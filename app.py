@@ -340,7 +340,7 @@ with st.sidebar:
         "選擇模型",
         ["qwen14b", "qwen7b", "gemini"],
         format_func=lambda x: {
-            "gemini": "Gemini 1.5 Flash (雲端 · 極快)",
+            "gemini": "Gemini 2.5 Flash (雲端 · 極快)",
             "qwen7b": "Qwen2.5-7B (本地 · 快速)",
             "qwen14b": "Qwen2.5-14B (本地 · 高精度)",
         }[x],
@@ -516,7 +516,7 @@ with st.container():
                     if was_new:
                         st.success(f"已加入資料庫: **{paper_data['title'][:80]}**")
                         if analyze_after:
-                            backend_label = {"qwen14b": "Qwen2.5-14B", "qwen7b": "Qwen2.5-7B", "gemini": "Gemini 1.5 Flash"}.get(llm_backend, llm_backend)
+                            backend_label = {"qwen14b": "Qwen2.5-14B", "qwen7b": "Qwen2.5-7B", "gemini": "Gemini 2.5 Flash"}.get(llm_backend, llm_backend)
                             with st.spinner(f"使用 {backend_label} 進行 AI 分析中..."):
                                 from processors.llm_analyzer import analyze_paper as analyze_fn
                                 analysis = analyze_fn(paper_data, backend=llm_backend)

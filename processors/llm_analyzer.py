@@ -3,7 +3,7 @@ llm_analyzer.py
 Multi-backend LLM analyzer for Literature Integrator.
 
 Supported backends:
-  - gemini   : Google Gemini 1.5 Flash (cloud, via google.genai SDK)
+  - gemini   : Google Gemini 2.5 Flash (cloud, via google.genai SDK)
   - qwen7b   : Qwen2.5:7b  (local Ollama, fast)
   - qwen14b  : Qwen2.5:14b (local Ollama, more accurate)
 
@@ -118,7 +118,7 @@ def _normalize_result(result: dict) -> dict:
 # --------------------------------------------------------------------------- #
 
 def _analyze_gemini(paper: dict, retries: int = 3, delay: float = 5.0) -> dict:
-    """Analyze via Google Gemini 1.5 Flash using the new google.genai SDK."""
+    """Analyze via Google Gemini 2.5 Flash using the new google.genai SDK."""
     try:
         from google import genai
         from google.genai import types
@@ -137,7 +137,7 @@ def _analyze_gemini(paper: dict, retries: int = 3, delay: float = 5.0) -> dict:
         try:
             print(f"    [Gemini] Attempt {attempt}/{retries}...")
             response = client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.5-flash",
                 contents=full_prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
@@ -152,7 +152,7 @@ def _analyze_gemini(paper: dict, retries: int = 3, delay: float = 5.0) -> dict:
                 result = _normalize_result(result)
                 result["status"] = "analyzed"
                 result["raw_analysis"] = raw_text
-                result["backend"] = "gemini-1.5-flash"
+                result["backend"] = "gemini-2.5-flash"
                 return result
             else:
                 raise ValueError(f"JSON parse failed. Raw: {raw_text[:200]}")
@@ -162,7 +162,7 @@ def _analyze_gemini(paper: dict, retries: int = 3, delay: float = 5.0) -> dict:
             if attempt < retries:
                 time.sleep(delay)
 
-    return _failed_result(str(last_error), "gemini-1.5-flash")
+    return _failed_result(str(last_error), "gemini-2.5-flash")
 
 
 # --------------------------------------------------------------------------- #
@@ -191,7 +191,7 @@ def _analyze_ollama(paper: dict, model_tag: str, retries: int = 3, delay: float 
     for attempt in range(1, retries + 1):
         try:
             print(f"    [Ollama/{model_tag}] Attempt {attempt}/{retries}...")
-            resp = http_requests.post(url, json=payload, timeout=180)
+            resp = http_requests.post(url, json=payload, timeout=900)
             resp.raise_for_status()
             data = resp.json()
             raw_text = data.get("message", {}).get("content", "")
