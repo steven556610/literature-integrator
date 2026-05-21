@@ -523,6 +523,12 @@ with st.container():
                                 db["update_analysis"](paper_data["paper_id"], analysis)
                                 if analysis["status"] == "analyzed":
                                     st.success(f"AI 分析完成！(模型: {analysis.get('backend', llm_backend)})")
+                                    try:
+                                        from integrators.notifier import send_all_notifications
+                                        paper_data.update(analysis)
+                                        send_all_notifications([paper_data])
+                                    except Exception as notify_err:
+                                        st.warning(f"通知發送失敗: {notify_err}")
                                 else:
                                     st.warning(f"分析未完成: {analysis.get('raw_analysis','')[:120]}")
                     else:
@@ -596,6 +602,12 @@ else:
                                 analysis = analyze_fn(paper, backend=llm_backend)
                                 db["update_analysis"](paper["paper_id"], analysis)
                                 st.success(f"分析完成 [{analysis.get('backend', llm_backend)}]")
+                                try:
+                                    from integrators.notifier import send_all_notifications
+                                    paper.update(analysis)
+                                    send_all_notifications([paper])
+                                except Exception as notify_err:
+                                    st.warning(f"通知發送失敗: {notify_err}")
                                 st.cache_data.clear()
                                 time.sleep(0.5)
                                 st.rerun()
