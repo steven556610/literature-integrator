@@ -1,0 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Environment variables (NEVER commit these!)
+.env
+.env.*
+
+# SQLite database
+*.db
+data/
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Streamlit
+.streamlit/
+
+# Temporary / scratch
+scratch/
+seed_db.py
